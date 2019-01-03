@@ -436,20 +436,20 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 	var text = '';
 	
 	var gender = pokemon.gender;
-	if (gender) gender = ' <img src="' + Tools.resourcePrefix + 'fx/gender-' + gender.toLowerCase() + '.png" alt="' + gender + '" />';
+	if (gender) gender = ' <img src="' + Dex.resourcePrefix + 'fx/gender-' + gender.toLowerCase() + '.png" alt="' + gender + '" />';
 	
 	text = '<div class="tooltipinner"><div class="tooltip">';
 	text += '<h2>' + pokemon.getFullName() + gender + (pokemon.level !== 100 ? ' <small>L' + pokemon.level + '</small>' : '')
-			+ '<small>' + ' ' + Tools.getTemplate(pokemon.species).heightm.toFixed(2) + 'm' + '</small>' + '<small>' + ' ' + Tools.getTemplate(pokemon.species).weightkg + 'kg' + '</small>' + '<br />';
-	text += '<small>' + "Tier: " + Tools.getTemplate(pokemon.species).tier + '</small>' + '<br />';
+			+ '<small>' + ' ' + Dex.getTemplate(pokemon.species).heightm.toFixed(2) + 'm' + '</small>' + '<small>' + ' ' + Dex.getTemplate(pokemon.species).weightkg + 'kg' + '</small>' + '<br />';
+	text += '<small>' + "Tier: " + Dex.getTemplate(pokemon.species).tier + '</small>' + '<br />';
 
 	var template = pokemon;
-	if (!pokemon.types) template = Tools.getTemplate(pokemon.species);
+	if (!pokemon.types) template = Dex.getTemplate(pokemon.species);
 	if (pokemon.volatiles && pokemon.volatiles.transform && pokemon.volatiles.formechange) {
-		template = Tools.getTemplate(pokemon.volatiles.formechange[2]);
+		template = Dex.getTemplate(pokemon.volatiles.formechange[2]);
 		text += '<small>(Transformed into ' + pokemon.volatiles.formechange[2] + ')</small><br />';
 	} else if (pokemon.volatiles && pokemon.volatiles.formechange) {
-		template = Tools.getTemplate(pokemon.volatiles.formechange[2]);
+		template = Dex.getTemplate(pokemon.volatiles.formechange[2]);
 		text += '<small>(Forme: ' + pokemon.volatiles.formechange[2] + ')</small><br />';
 	}
 
@@ -472,7 +472,7 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 	}
 	if (isTypeChanged) text += '<small>(Type changed)</small><br />';
 	if (types) {
-		text += types.map(Tools.getTypeIcon).join(' ');
+		text += types.map(Dex.getTypeIcon).join(' ');
 	} else {
 		text += 'Types unknown';
 	}
@@ -527,15 +527,15 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 	var typeEff = ShowdownEnhancedTooltip.getTypeEff(types);
 	text += '<p>Weaknesses: <br />';
 	if (typeEff["4"].length > 0) 
-		text += "<p>4x: " + (typeEff["4"].map(Tools.getTypeIcon).join('')) + "</p>";
+		text += "<p>4x: " + (typeEff["4"].map(Dex.getTypeIcon).join('')) + "</p>";
 	if (typeEff["2"].length > 0) 
-		text += "<p>2x: " + (typeEff["2"].map(Tools.getTypeIcon).join('')) + "</p>";
+		text += "<p>2x: " + (typeEff["2"].map(Dex.getTypeIcon).join('')) + "</p>";
 	if (typeEff["0.5"].length > 0) 
-		text += "<p>.5x: " + (typeEff["0.5"].map(Tools.getTypeIcon).join('')) + "</p>";
+		text += "<p>.5x: " + (typeEff["0.5"].map(Dex.getTypeIcon).join('')) + "</p>";
 	if (typeEff["0.25"].length > 0) 
-		text += "<p>.25x: " + (typeEff["0.25"].map(Tools.getTypeIcon).join('')) + "</p>";
+		text += "<p>.25x: " + (typeEff["0.25"].map(Dex.getTypeIcon).join('')) + "</p>";
 	if (typeEff["0"].length > 0)
-		text += "<p>Immunities: " + (typeEff["0"].map(Tools.getTypeIcon).join('')) + "</p>";
+		text += "<p>Immunities: " + (typeEff["0"].map(Dex.getTypeIcon).join('')) + "</p>";
 	text += '</p>';
 	
 	text += '<p class="section">';	
@@ -552,17 +552,17 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 		if (this.battle.gen > 2) {
 			var abilityText = '';
 			if (pokemon.ability && (pokemon.ability !== pokemon.baseAbility)) {
-				abilityText = Tools.getAbility(pokemon.ability).name + ' (base: ' + Tools.getAbility(pokemon.baseAbility).name + ')';
+				abilityText = Dex.getAbility(pokemon.ability).name + ' (base: ' + Dex.getAbility(pokemon.baseAbility).name + ')';
 			} else {
-				abilityText = Tools.getAbility(pokemonData.baseAbility).name;
+				abilityText = Dex.getAbility(pokemonData.baseAbility).name;
 			}
 			text += '<p>Ability: ' + abilityText;
 			if (pokemonData.item) {
-				text += ' / Item: ' + Tools.getItem(pokemonData.item).name;
+				text += ' / Item: ' + Dex.getItem(pokemonData.item).name;
 			}
 			text += '</p>';
 		} else if (pokemonData.item) {
-			item = Tools.getItem(pokemonData.item).name;
+			item = Dex.getItem(pokemonData.item).name;
 			text += '<p>Item: ' + item + '</p>';
 		}
 		text += '<p>' + pokemonData.stats['atk'] + '&nbsp;Atk /&nbsp;' + pokemonData.stats['def'] + '&nbsp;Def /&nbsp;' + pokemonData.stats['spa'];
@@ -595,19 +595,19 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 					var table = BattleTeambuilderTable['gen' + this.battle.gen];
 					if (template.speciesid in table.overrideAbility) ability0 = table.overrideAbility[template.speciesid];
 				}
-				text += '<p>Possible abilities: ' + Tools.getAbility(ability0).name;
-				if (template.abilities['1']) text += ', ' + Tools.getAbility(template.abilities['1']).name;
-				if (this.battle.gen > 4 && template.abilities['H']) text += ', ' + Tools.getAbility(template.abilities['H']).name;
+				text += '<p>Possible abilities: ' + Dex.getAbility(ability0).name;
+				if (template.abilities['1']) text += ', ' + Dex.getAbility(template.abilities['1']).name;
+				if (this.battle.gen > 4 && template.abilities['H']) text += ', ' + Dex.getAbility(template.abilities['H']).name;
 				text += '</p>';
 			}
 		} else if (pokemon.ability) {
 			if (pokemon.ability === pokemon.baseAbility) {
-				text += '<p>Ability: ' + Tools.getAbility(pokemon.ability).name + '</p>';
+				text += '<p>Ability: ' + Dex.getAbility(pokemon.ability).name + '</p>';
 			} else {
-				text += '<p>Ability: ' + Tools.getAbility(pokemon.ability).name + ' (base: ' + Tools.getAbility(pokemon.baseAbility).name + ')' + '</p>';
+				text += '<p>Ability: ' + Dex.getAbility(pokemon.ability).name + ' (base: ' + Dex.getAbility(pokemon.baseAbility).name + ')' + '</p>';
 			}
 		} else if (pokemon.baseAbility) {
-			text += '<p>Ability: ' + Tools.getAbility(pokemon.baseAbility).name + '</p>';
+			text += '<p>Ability: ' + Dex.getAbility(pokemon.baseAbility).name + '</p>';
 		}
 	}
 
@@ -617,10 +617,10 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 		if (pokemon.prevItem) {
 			item = 'None';
 			if (itemEffect) itemEffect += '; ';
-			var prevItem = Tools.getItem(pokemon.prevItem).name;
+			var prevItem = Dex.getItem(pokemon.prevItem).name;
 			itemEffect += pokemon.prevItemEffect ? prevItem + ' was ' + pokemon.prevItemEffect : 'was ' + prevItem;
 		}
-		if (pokemon.item) item = Tools.getItem(pokemon.item).name;
+		if (pokemon.item) item = Dex.getItem(pokemon.item).name;
 		if (itemEffect) itemEffect = ' (' + itemEffect + ')';
 		if (item) text += '<p>Item: ' + item + itemEffect + '</p>';
 
@@ -633,7 +633,7 @@ ShowdownEnhancedTooltip.showPokemonTooltip = function(pokemon, pokemonData, isAc
 		text += '<p class="section">';
 		var battlePokemon = this.battle.getPokemon(pokemon.ident, pokemon.details);
 		for (var i = 0; i < pokemonData.moves.length; i++) {
-			var move = Tools.getMove(pokemonData.moves[i]);
+			var move = Dex.getMove(pokemonData.moves[i]);
 			var name = move.name;
 			var pp = 0, maxpp = 0;
 			if (battlePokemon && battlePokemon.moveTrack) {
